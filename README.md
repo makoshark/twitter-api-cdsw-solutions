@@ -21,4 +21,4 @@
 1. Alter the streaming code to include a "locations" filter. You need to use the order sw_lng, sw_lat, ne_lng, ne_lat for the four coordinates.
 2. What are people tweeting about in Times Square today?
 3. Set up a bounding box around TS and around NYC as a whole.
-4. Do "static" (i.e., not using the streaming API) geolocation search using code like this:  d = api.search(geocode='37.781157,-122.398720,1mi')
+4. Do "static" (i.e., not using the streaming API) geolocation search using code like this: `d = api.search(geocode='37.781157,-122.398720,1mi')`
