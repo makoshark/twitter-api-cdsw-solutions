@@ -1,25 +1,20 @@
+# What are people tweeting about in Times Square today?
+
+# Note: to answer this, I used this website to find a good box:
+# http://boundingbox.klokantech.com/
+
 import encoding_fix
-import json
 import tweepy
 from twitter_authentication import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
-api = tweepy.API(auth, parser=tweepy.parsers.RawParser())
-
-@classmethod                    
-def parse(cls, api, raw):
-    status = cls.first_parse(api, raw)
-    setattr(status, 'json', json.dumps(raw))
-    return status
-
-tweepy.models.Status.first_parse = tweepy.models.Status.parse
-tweepy.models.Status.parse = parse
+api = tweepy.API(auth)
 
 class StreamListener(tweepy.StreamListener):
     def on_status(self, tweet):
-        print(tweet.json)
+        print(tweet.author.screen_name + "\t" + tweet.text)
 
     def on_error(self, status_code):
         print('Error: ' + repr(status_code))
@@ -28,4 +23,6 @@ class StreamListener(tweepy.StreamListener):
 l = StreamListener()
 streamer = tweepy.Stream(auth=auth, listener=l)
 
-streamer.sample()
+# This should grab tweets in Times Square
+streamer.filter(locations=[-73.9864799803,40.7575460197,-73.9837820197,40.7602439803])
+
